@@ -1,0 +1,44 @@
+mat-card {
+  font-family: Arial, serif;
+  font-weight: bold;
+  margin: 15vh auto;
+  padding: 1%;
+  width: 35%;
+
+  mat-card-title {
+    display: flex;
+    justify-content: center;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+
+    .hobbies {
+      margin-bottom: 1rem;
+
+      .hobby-header {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        margin-bottom:1rem;
+      }
+
+      .hobby-body {
+        display: flex;
+        gap: 1rem;
+      }
+    }
+
+    .button {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+
+
+
+
+
+
