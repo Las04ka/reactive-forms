@@ -21,18 +21,14 @@ mat-card {
         display: flex;
         gap: 1rem;
         align-items: center;
-        margin-bottom:1rem;
+        margin-bottom: 1rem;
       }
 
       .hobby-body {
         display: flex;
         gap: 1rem;
+        margin-bottom: 1.2rem;
       }
-    }
-
-    .button {
-      display: flex;
-      justify-content: space-between;
     }
   }
 }

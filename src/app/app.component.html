@@ -2,12 +2,14 @@
   <mat-card-title>Register</mat-card-title>
   <mat-card-content>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
       <mat-form-field>
         <mat-label>First Name:</mat-label>
         <input matInput
                placeholder="Jack"
                formControlName="firstName">
+        <mat-error *ngIf="fieldIsEmpty('firstName')">
+          name is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
@@ -15,37 +17,50 @@
         <input matInput
                placeholder="Smith"
                formControlName="lastName">
+        <mat-error *ngIf="fieldIsEmpty('lastName')">
+          last name is required
+        </mat-error>
       </mat-form-field>
 
       <mat-form-field>
         <mat-label>Birthday:</mat-label>
         <input type="date"
-               matInput placeholder="Birthday"
+               matInput
+               placeholder="Birthday"
                formControlName="birthday">
+        <mat-error *ngIf="fieldIsEmpty('birthday')">
+          birthday is required
+        </mat-error>
       </mat-form-field>
 
       <div class="technologies">
         <mat-label>Technology:</mat-label>
-        <mat-radio-group formControlName="tech">
+        <mat-radio-group formControlName="technology">
           <mat-radio-button
             class="example-radio-button"
-            *ngFor="let tech of technologies|keyvalue"
-            [value]="tech.key">
-            {{tech.key}}
+            *ngFor="let tech of technologies"
+            [value]="tech">
+            {{ tech }}
           </mat-radio-button>
         </mat-radio-group>
+        <mat-error *ngIf="fieldIsEmpty('technology')">
+          technology is required
+        </mat-error>
       </div>
 
-      <div class="technologies-versions">
+      <div class="technologies-versions" [hidden]="fieldIsEmpty('technology')">
         <mat-label>Version:</mat-label>
-        <mat-radio-group formControlName="techVersion">
+        <mat-radio-group formControlName="technologyVersion">
           <mat-radio-button
             class="example-radio-button"
-            *ngFor="let version of technologies[selectedTechnology]"
+            *ngFor="let version of formService.technologiesVersions|async"
             [value]="version">
-            {{version}}
+            {{ version }}
           </mat-radio-button>
         </mat-radio-group>
+        <mat-error *ngIf="fieldIsEmpty('technologyVersion')">
+          technology version is required
+        </mat-error>
       </div>
 
       <mat-form-field>
@@ -53,6 +68,12 @@
         <input type="email"
                matInput
                formControlName="email">
+        <mat-error *ngIf="form.controls['email'].hasError('forbiddenEmail')">
+          email is already in use
+        </mat-error>
+        <mat-error *ngIf="fieldIsEmpty('email')">
+          email is required
+        </mat-error>
       </mat-form-field>
 
       <div class="hobbies" formArrayName="hobbies">
@@ -69,17 +90,25 @@
               remove
             </button>
           </div>
+
           <div class="hobby-body">
             <mat-form-field>
               <mat-label> Name</mat-label>
               <input matInput formControlName="hobbyName"/>
+              <mat-error *ngIf="hobbies.controls[0].get('hobbyName')?.hasError('required')">
+                hobby name is required
+              </mat-error>
             </mat-form-field>
             <mat-form-field>
               <mat-label> Duration</mat-label>
               <input matInput formControlName="hobbyDuration"/>
+              <mat-error *ngIf="hobbies.controls[0].get('hobbyDuration')?.hasError('required')">
+                hobby duration is required
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
+
         <button
           type="button"
           mat-raised-button
@@ -88,10 +117,6 @@
           add
         </button>
       </div>
-
-      <mat-error *ngIf="form.controls['email'].hasError('forbiddenEmail')">
-        email is already in use
-      </mat-error>
 
       <button
         mat-raised-button

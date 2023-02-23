@@ -1,19 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormArray,
   FormBuilder,
-  FormControl,
   FormGroup,
-  ValidationErrors,
   Validators
-} from "@angular/forms";
-import { delay, Observable, of, map } from "rxjs";
+} from '@angular/forms';
+import { distinctUntilChanged, Subscription } from 'rxjs';
 
-enum Technologies {
-  Angular = 'angular',
-  React = 'react',
-  Vue = 'vue'
-}
+import { FormService } from './form.service';
+import { TechnologiesTypes } from './technologies-model';
 
 @Component({
   selector: 'app-root',
@@ -21,22 +16,23 @@ enum Technologies {
   styleUrls: ['./app.component.scss']
 })
 
-export class AppComponent {
-  technologies = {
-    angular: ['1.1.1', '1.2.1', '1.3.3'],
-    react: ['2.1.2', '3.2.4', '4.3.1'],
-    vue: ['3.3.1', '5.2.1', '5.1.3']
-  }
+export class AppComponent implements OnInit, OnDestroy{
+  technologies = [
+    'angular',
+    'react',
+    'vue'
+  ]
   form: FormGroup;
+  private technologySubscription!: Subscription;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, public formService: FormService) {
     this.form = this.fb.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
       birthday: ['', Validators.required],
-      tech: [null, Validators.required],
-      techVersion: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email,], this.emailValidator],
+      technology: [null, Validators.required],
+      technologyVersion: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email,], formService.emailValidator],
       hobbies: this.fb.array([
         this.fb.group({
           hobbyName: ['', Validators.required],
@@ -46,18 +42,27 @@ export class AppComponent {
     })
   }
 
-  emailValidator(control: FormControl,): Observable<ValidationErrors | null> {
-    return of(control.value).pipe(
-      delay(1000),
-      map((value) => (value === 'test@test.test' ? {forbiddenEmail: true} : null)),
-    );
+  ngOnInit(): void {
+    this.technologySubscription = this.form.get('technology')!.valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe((technology: TechnologiesTypes) => {
+        this.formService.getTechnologiesVersions(technology);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.technologySubscription.unsubscribe()
+  }
+
+  fieldIsEmpty(field: string): boolean {
+    return (this.form.controls[field].hasError('required'))
   }
 
   onSubmit(): void {
     console.log(this.form.value)
   }
 
-  onAddHobby():void {
+  onAddHobby(): void {
     this.hobbies.push(
       this.fb.group({
           hobbyName: ['', Validators.required],
@@ -65,17 +70,14 @@ export class AppComponent {
         }
       )
     )
+    console.log(this.formService.technologiesVersions)
   }
 
-  onDeleteHobby(i: number):void {
-    this.hobbies.removeAt(i)
+  onDeleteHobby(index: number): void {
+    this.hobbies.removeAt(index)
   }
 
-  get selectedTechnology():Technologies {
-    return this.form.get('tech')?.value
-  }
-
-  get hobbies():FormArray {
+  get hobbies(): FormArray {
     return <FormArray>this.form.get('hobbies')
   }
 }
