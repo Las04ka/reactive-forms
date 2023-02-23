@@ -69,7 +69,8 @@
         <mat-label>Email:</mat-label>
         <input type="email"
                matInput
-               formControlName="email">
+               formControlName="email"
+               myAsyncValidator>
         <mat-error *ngIf="form.controls['email'].hasError('forbiddenEmail')">
           email is already in use
         </mat-error>

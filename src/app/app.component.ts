@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy{
       birthday: ['', Validators.required],
       technology: [null, Validators.required],
       technologyVersion: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email,], formService.emailValidator],
+      email: ['', [Validators.required, Validators.email,]],
       hobbies: this.fb.array([
         this.fb.group({
           hobbyName: ['', Validators.required],

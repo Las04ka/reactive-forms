@@ -1,8 +1,7 @@
-import {Injectable} from '@angular/core';
-import {FormControl, ValidationErrors} from '@angular/forms';
-import {delay, map, Observable, of, Subject, take} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { map, of, Subject, take } from 'rxjs';
 
-import {ITechnologiesData, TechnologiesTypes} from './technologies-model'
+import { ITechnologiesData, TechnologiesTypes } from './technologies-model'
 
 const technologiesData:ITechnologiesData = {
   angular: ['1.1.1', '1.2.1', '1.3.3'],
@@ -24,12 +23,5 @@ export class FormService {
       .subscribe((versions) => {
         this.technologiesVersions.next(versions);
       });
-  }
-
-  emailValidator(control: FormControl,): Observable<ValidationErrors | null> {
-    return of(control.value).pipe(
-      delay(1000),
-      map((value) => (value === 'test@test.test' ? {forbiddenEmail: true} : null)),
-    );
   }
 }
