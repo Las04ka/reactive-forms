@@ -70,7 +70,7 @@ export class AppComponent implements OnInit, OnDestroy{
         }
       )
     )
-    console.log(this.formService.technologiesVersions)
+    console.log(this.fieldIsEmpty('technology'))
   }
 
   onDeleteHobby(index: number): void {

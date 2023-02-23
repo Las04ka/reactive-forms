@@ -33,34 +33,36 @@
         </mat-error>
       </mat-form-field>
 
-      <div class="technologies">
+      <mat-form-field>
         <mat-label>Technology:</mat-label>
-        <mat-radio-group formControlName="technology">
-          <mat-radio-button
+        <mat-select formControlName="technology">
+          <mat-option
             class="example-radio-button"
             *ngFor="let tech of technologies"
             [value]="tech">
             {{ tech }}
-          </mat-radio-button>
-        </mat-radio-group>
+          </mat-option>
+        </mat-select>
         <mat-error *ngIf="fieldIsEmpty('technology')">
           technology is required
         </mat-error>
-      </div>
+      </mat-form-field>
 
-      <div class="technologies-versions" [hidden]="fieldIsEmpty('technology')">
-        <mat-label>Version:</mat-label>
-        <mat-radio-group formControlName="technologyVersion">
-          <mat-radio-button
-            class="example-radio-button"
-            *ngFor="let version of formService.technologiesVersions|async"
-            [value]="version">
-            {{ version }}
-          </mat-radio-button>
-        </mat-radio-group>
-        <mat-error *ngIf="fieldIsEmpty('technologyVersion')">
-          technology version is required
-        </mat-error>
+      <div [hidden]="fieldIsEmpty('technology')">
+        <mat-form-field class='versions'>
+          <mat-label>Version:</mat-label>
+          <mat-select formControlName="technologyVersion">
+            <mat-option
+              class="example-radio-button"
+              *ngFor="let version of formService.technologiesVersions|async"
+              [value]="version">
+              {{ version }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="fieldIsEmpty('technologyVersion')">
+            technology version is required
+          </mat-error>
+        </mat-form-field>
       </div>
 
       <mat-form-field>
