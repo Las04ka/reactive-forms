@@ -1,6 +1,6 @@
 import { Directive } from '@angular/core';
-import {AsyncValidator, FormControl, NG_ASYNC_VALIDATORS, ValidationErrors} from "@angular/forms";
-import { delay, map, Observable, of } from "rxjs";
+import { AsyncValidator, FormControl, NG_ASYNC_VALIDATORS, ValidationErrors } from '@angular/forms';
+import { delay, map, Observable, of } from 'rxjs';
 
 @Directive({
   selector: '[myAsyncValidator]',
